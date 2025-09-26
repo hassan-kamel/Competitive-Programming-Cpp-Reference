@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive C++ STL Iterator Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Chosen Palette: Calm Neutrals -->
+    <!-- Application Structure Plan: A single-page app with a fixed left-sidebar for navigation and a dynamic main content area. This structure provides easy, non-linear access to the dense technical information, which is superior to a simple long-scroll document. Key interactions include navigation that updates the view, a visual capabilities chart for quick reference, and copy-to-clipboard buttons for code snippets. -->
+    <!-- Visualization & Content Choices: Report Info: Iterator types and container support. Goal: Organize/Compare. Viz: HTML/CSS grid showing container-to-iterator-type mapping. Interaction: Hover effects. Justification: Quick visual lookup. Report Info: Relative power of iterators. Goal: Compare. Viz: Chart.js horizontal bar chart. Justification: Visually quantifies the abstract concept of iterator capability. Report Info: Code examples. Goal: Inform. Method: Styled code blocks. Interaction: Copy-to-clipboard button. Justification: Enhances usability for developers. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap");
+      .font-mono {
+        font-family: "JetBrains Mono", monospace;
+      }
+      .nav-link.active {
+        background-color: #e5e7eb;
+        color: #111827;
+        font-weight: 600;
+      }
+      .content-section {
+        display: none;
+      }
+      .content-section.active {
+        display: block;
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 300px;
+        max-height: 400px;
+      }
+      /* Styling for highlight.js */
+      .hljs {
+        background: #1f2937 !important;
+        color: #d1d5db;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 text-slate-800">
+    <div class="flex flex-col h-screen">
+      <header
+        class="bg-white shadow-md w-full p-4 border-b border-slate-200 z-10"
+      >
+        <h1 class="text-2xl font-bold text-slate-900">
+          Interactive C++ STL Iterator Guide
+        </h1>
+        <p class="text-slate-600">
+          An interactive guide to mastering iterators in the C++ Standard
+          Template Library.
+        </p>
+      </header>
+
+      <div class="flex flex-1 overflow-hidden">
+        <aside
+          class="w-64 bg-white border-r border-slate-200 p-4 overflow-y-auto flex-shrink-0"
+        >
+          <nav id="navigation" class="space-y-2">
+            <h3
+              class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2"
+            >
+              Overview
+            </h3>
+            <a
+              href="#introduction"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >Introduction</a
+            >
+
+            <h3
+              class="text-sm font-semibold text-slate-500 uppercase tracking-wider mt-4 mb-2"
+            >
+              Sequential
+            </h3>
+            <a
+              href="#vector"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::vector</a
+            >
+            <a
+              href="#deque"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::deque</a
+            >
+            <a
+              href="#list"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::list</a
+            >
+            <a
+              href="#forward_list"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::forward_list</a
+            >
+            <a
+              href="#array"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::array</a
+            >
+
+            <h3
+              class="text-sm font-semibold text-slate-500 uppercase tracking-wider mt-4 mb-2"
+            >
+              Associative
+            </h3>
+            <a
+              href="#set"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::set</a
+            >
+            <a
+              href="#map"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::map</a
+            >
+
+            <h3
+              class="text-sm font-semibold text-slate-500 uppercase tracking-wider mt-4 mb-2"
+            >
+              Unordered
+            </h3>
+            <a
+              href="#unordered_set"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::unordered_set</a
+            >
+            <a
+              href="#unordered_map"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::unordered_map</a
+            >
+
+            <h3
+              class="text-sm font-semibold text-slate-500 uppercase tracking-wider mt-4 mb-2"
+            >
+              Other
+            </h3>
+            <a
+              href="#string"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >std::string</a
+            >
+            <a
+              href="#c_array"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >C-style Arrays</a
+            >
+
+            <h3
+              class="text-sm font-semibold text-slate-500 uppercase tracking-wider mt-4 mb-2"
+            >
+              Specialized
+            </h3>
+            <a
+              href="#stream"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >Stream Iterators</a
+            >
+            <a
+              href="#insert"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >Insert Iterators</a
+            >
+            <a
+              href="#move"
+              class="nav-link block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors duration-200"
+              >Move Iterators</a
+            >
+          </nav>
+        </aside>
+
+        <main
+          id="main-content"
+          class="flex-1 p-6 lg:p-8 bg-slate-50 overflow-y-auto"
+        >
+          <div id="introduction" class="content-section space-y-6">
+            <h2 class="text-3xl font-bold text-slate-900 border-b pb-2">
+              A Comprehensive Guide to C++ STL Iterators
+            </h2>
+            <p class="text-lg text-slate-700">
+              Iterators are a cornerstone of the C++ Standard Template Library
+              (STL). They act as a generalized pointer, providing a common
+              interface to traverse and access elements in any container, from a
+              <code>std::vector</code> to a <code>std::map</code>. This allows
+              STL algorithms like <code>std::sort</code>,
+              <code>std::find</code>, and <code>std::copy</code> to work with
+              any container type seamlessly.
+            </p>
+
+            <h3 class="text-2xl font-bold text-slate-900 pt-4">
+              Iterator Capabilities Comparison
+            </h3>
+            <p class="text-slate-700">
+              Different containers provide iterators with varying levels of
+              functionality. This chart visually compares the "power" of the
+              main iterator categories based on the operations they support.
+            </p>
+            <div class="chart-container">
+              <canvas id="iteratorChart"></canvas>
+            </div>
+
+            <h3 class="text-2xl font-bold text-slate-900 pt-4">
+              Container to Iterator Mapping
+            </h3>
+            <p class="text-slate-700">
+              This table provides a quick reference for which iterator category
+              each STL container supports. Understanding this is key to knowing
+              which algorithms you can use with each container.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div class="bg-white p-4 rounded-lg shadow">
+                <h4 class="font-bold text-lg text-blue-600">▶️ Forward</h4>
+                <p class="text-sm text-slate-500 mb-2">(<code>++it</code>)</p>
+                <ul class="text-slate-700">
+                  <li><code>std::forward_list</code></li>
+                  <li>All Unordered Containers</li>
+                </ul>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow">
+                <h4 class="font-bold text-lg text-green-600">
+                  ◀️▶️ Bidirectional
+                </h4>
+                <p class="text-sm text-slate-500 mb-2">
+                  (<code>++it</code>, <code>--it</code>)
+                </p>
+                <ul class="text-slate-700">
+                  <li><code>std::list</code></li>
+                  <li>All Ordered Associative</li>
+                </ul>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow">
+                <h4 class="font-bold text-lg text-purple-600">
+                  ⏭️ Random Access
+                </h4>
+                <p class="text-sm text-slate-500 mb-2">
+                  (<code>++</code>, <code>--</code>, <code>+n</code>,
+                  <code>-n</code>, <code>[]</code>)
+                </p>
+                <ul class="text-slate-700">
+                  <li><code>std::vector</code></li>
+                  <li><code>std::deque</code></li>
+                  <li><code>std::array</code></li>
+                  <li><code>std::string</code></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div id="vector" class="content-section"></div>
+          <div id="deque" class="content-section"></div>
+          <div id="list" class="content-section"></div>
+          <div id="forward_list" class="content-section"></div>
+          <div id="array" class="content-section"></div>
+          <div id="set" class="content-section"></div>
+          <div id="map" class="content-section"></div>
+          <div id="unordered_set" class="content-section"></div>
+          <div id="unordered_map" class="content-section"></div>
+          <div id="string" class="content-section"></div>
+          <div id="c_array" class="content-section"></div>
+          <div id="stream" class="content-section"></div>
+          <div id="insert" class="content-section"></div>
+          <div id="move" class="content-section"></div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      const contentData = {
+        vector: {
+          title: "std::vector",
+          description:
+            "Vectors provide fast, random access to elements. Their iterators are <strong>Random Access Iterators</strong>.",
+          code: `#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> vec = {10, 20, 30, 40, 50};
+
+    // 1. Forward iteration
+    std::cout << "Forward: ";
+    for (auto it = vec.begin(); it != vec.end(); ++it) {
+        std::cout << *it << " ";
+        *it += 1; // Modify
+    }
+    std::cout << std::endl;
+
+    // 2. Reverse iteration
+    std::cout << "Reverse: ";
+    for (auto it = vec.rbegin(); it != vec.rend(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+
+    // 3. Const iteration (read-only)
+    std::cout << "Const:   ";
+    for (auto it = vec.cbegin(); it != vec.cend(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // 4. Random access
+    auto it = vec.begin();
+    std::cout << "Element at index 3: " << *(it + 3) << std::endl;
+
+    return 0;
+}`,
+        },
+        deque: {
+          title: "std::deque",
+          description:
+            "A double-ended queue, <code>deque</code>, also has <strong>Random Access Iterators</strong>, just like <code>vector</code>.",
+          code: `#include <iostream>
+#include <deque>
+
+int main() {
+    std::deque<std::string> dq = {"apple", "banana", "cherry"};
+
+    std::cout << "Deque elements: ";
+    for (const auto& fruit : dq) {
+        std::cout << fruit << " ";
+    }
+    std::cout << std::endl;
+
+    // Random access
+    auto it = dq.begin();
+    std::cout << "Second element: " << *(it + 1) << std::endl;
+
+    return 0;
+}`,
+        },
+        list: {
+          title: "std::list",
+          description:
+            "A doubly-linked list. Its iterators are <strong>Bidirectional Iterators</strong>, meaning they can go forward (<code>++it</code>) and backward (<code>--it</code>), but cannot jump (<code>it + 3</code>).",
+          code: `#include <iostream>
+#include <list>
+
+int main() {
+    std::list<int> lst = {100, 200, 300};
+
+    auto it = lst.begin();
+    ++it; // Move to the second element (200)
+    std::cout << "Second element: " << *it << std::endl;
+
+    --it; // Move back to the first element (100)
+    std::cout << "First element: " << *it << std::endl;
+
+    std::cout << "List elements: ";
+    for (int val : lst) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}`,
+        },
+        forward_list: {
+          title: "std::forward_list",
+          description:
+            "A singly-linked list. Its iterators are <strong>Forward Iterators</strong>, meaning they can only go forward (<code>++it</code>).",
+          code: `#include <iostream>
+#include <forward_list>
+
+int main() {
+    std::forward_list<char> flist = {'a', 'b', 'c'};
+    
+    std::cout << "Forward list: ";
+    for (auto it = flist.begin(); it != flist.end(); ++it) {
+        std::cout << *it << " ";
+        // --it; // This would be a compile error
+    }
+    std::cout << std::endl;
+    
+    return 0;
+}`,
+        },
+        array: {
+          title: "std::array",
+          description:
+            "A fixed-size array. It has <strong>Random Access Iterators</strong>, just like <code>vector</code>.",
+          code: `#include <iostream>
+#include <array>
+#include <algorithm>
+
+int main() {
+    std::array<int, 5> arr = {5, 4, 3, 2, 1};
+
+    // Use iterators with an STL algorithm
+    std::sort(arr.begin(), arr.end());
+
+    std::cout << "Sorted array: ";
+    for (int val : arr) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}`,
+        },
+        set: {
+          title: "std::set",
+          description:
+            "Stores a sorted collection of unique elements. Iterators are <strong>Bidirectional</strong>.",
+          code: `#include <iostream>
+#include <set>
+
+int main() {
+    std::set<std::string> sorted_set = {"gamma", "alpha", "beta"};
+
+    std::cout << "Set elements (sorted): ";
+    for (const auto& val : sorted_set) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    // Find an element
+    auto it = sorted_set.find("beta");
+    if (it != sorted_set.end()) {
+        std::cout << "Found: " << *it << std::endl;
+    }
+
+    return 0;
+}`,
+        },
+        map: {
+          title: "std::map",
+          description:
+            "Stores sorted key-value pairs with unique keys. Iterating over a map gives you <code>std::pair</code> objects. Iterators are <strong>Bidirectional</strong>.",
+          code: `#include <iostream>
+#include <map>
+
+int main() {
+    std::map<std::string, int> ages = {
+        {"Bob", 35},
+        {"Alice", 28},
+        {"Charlie", 42}
+    };
+
+    std::cout << "Map elements (sorted by key):\\n";
+    for (auto it = ages.cbegin(); it != ages.cend(); ++it) {
+        // it->first is the key, it->second is the value
+        std::cout << it->first << " is " << it->second << " years old.\\n";
+    }
+
+    return 0;
+}`,
+        },
+        unordered_set: {
+          title: "std::unordered_set",
+          description:
+            "Stores a collection of unique elements in no particular order, using a hash table. Iterators are <strong>Forward Iterators</strong>.",
+          code: `#include <iostream>
+#include <unordered_set>
+
+int main() {
+    std::unordered_set<int> u_set = {40, 10, 30, 20, 10};
+
+    std::cout << "Unordered set (order not guaranteed): ";
+    for (int val : u_set) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}`,
+        },
+        unordered_map: {
+          title: "std::unordered_map",
+          description:
+            "Stores key-value pairs in no particular order. Iterators are <strong>Forward Iterators</strong>.",
+          code: `#include <iostream>
+#include <unordered_map>
+
+int main() {
+    std::unordered_map<std::string, std::string> capitals = {
+        {"France", "Paris"},
+        {"Japan", "Tokyo"},
+        {"Egypt", "Cairo"}
+    };
+
+    std::cout << "Unordered map (order not guaranteed):\\n";
+    for (const auto& pair : capitals) {
+        std::cout << "Capital of " << pair.first << " is " << pair.second << ".\\n";
+    }
+
+    return 0;
+}`,
+        },
+        string: {
+          title: "std::string",
+          description:
+            "A <code>std::string</code> is a container of characters, and it supports <strong>Random Access Iterators</strong>.",
+          code: `#include <iostream>
+#include <string>
+#include <algorithm>
+
+int main() {
+    std::string text = "hello";
+
+    // Use an iterator to change a character
+    auto it = text.begin() + 1; // points to 'e'
+    *it = 'a';
+    
+    std::cout << "Modified text: " << text << std::endl;
+    
+    // Reverse the string using reverse iterators
+    std::string reversed_text(text.rbegin(), text.rend());
+    std::cout << "Reversed text: " << reversed_text << std::endl;
+
+    return 0;
+}`,
+        },
+        c_array: {
+          title: "C-style Arrays",
+          description:
+            "Raw pointers can act as iterators for C-style arrays, making them compatible with many STL algorithms.",
+          code: `#include <iostream>
+#include <numeric>
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    // Pointers act as begin and end iterators
+    int* begin_ptr = arr;
+    int* end_ptr = arr + n;
+
+    int sum = std::accumulate(begin_ptr, end_ptr, 0);
+    
+    std::cout << "Sum of C-style array: " << sum << std::endl;
+
+    return 0;
+}`,
+        },
+        stream: {
+          title: "Stream Iterators",
+          description:
+            "These iterators allow you to treat input/output streams as if they were containers.",
+          code: `#include <iostream>
+#include <vector>
+#include <iterator>
+#include <algorithm>
+
+int main() {
+    // This example is best run in a local compiler
+    // to provide interactive input.
+    std::cout << "Enter numbers (end with non-number): ";
+    
+    std::istream_iterator<int> input_begin(std::cin);
+    std::istream_iterator<int> input_end;
+
+    std::vector<int> numbers(input_begin, input_end);
+
+    std::cout << "\\nYou entered " << numbers.size() << " numbers: ";
+    
+    std::copy(numbers.begin(), numbers.end(), 
+              std::ostream_iterator<int>(std::cout, " | "));
+    std::cout << std::endl;
+
+    return 0;
+}`,
+        },
+        insert: {
+          title: "Insert Iterators",
+          description:
+            "Insert iterators are special output iterators that insert new elements into a container. <code>std::back_inserter</code> is the most common.",
+          code: `#include <iostream>
+#include <vector>
+#include <iterator>
+#include <algorithm>
+
+int main() {
+    std::vector<int> source = {1, 2, 3};
+    std::vector<int> dest = {10, 20};
+
+    std::copy(source.begin(), source.end(), std::back_inserter(dest));
+
+    std::cout << "Destination vector: ";
+    for (int val : dest) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}`,
+        },
+        move: {
+          title: "Move Iterators",
+          description:
+            "A move iterator adapts another iterator to move elements from a source container instead of copying them, which is more efficient for complex objects.",
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+#include <iterator>
+#include <algorithm>
+
+int main() {
+    std::vector<std::string> source = {"big_string_one", "big_string_two"};
+    std::vector<std::string> dest;
+
+    std::move(source.begin(), source.end(), std::back_inserter(dest));
+
+    std::cout << "Destination after move: ";
+    for (const auto& s : dest) {
+        std::cout << "\\"" << s << "\\" ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Source after move (elements are empty): ";
+    for (const auto& s : source) {
+        std::cout << "\\"" << s << "\\" ";
+    }
+    std::cout << std::endl;
+    
+    return 0;
+}`,
+        },
+      };
+
+      function createContentBlock(id) {
+        const data = contentData[id];
+        if (!data) return "";
+
+        const escapedCode = data.code
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+
+        return `
+            <div class="space-y-4">
+                <h2 class="text-3xl font-bold text-slate-900 border-b pb-2">${data.title}</h2>
+                <p class="text-lg text-slate-700">${data.description}</p>
+                <div class="bg-slate-900 rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex justify-between items-center p-2 bg-slate-800 border-b border-slate-700">
+                        <span class="text-sm text-slate-400 font-sans">C++ Example</span>
+                        <button class="copy-btn bg-slate-600 text-slate-200 px-3 py-1 rounded-md text-sm hover:bg-slate-500 transition-colors">Copy</button>
+                    </div>
+                    <pre class="p-4 text-sm"><code class="language-cpp font-mono whitespace-pre-wrap">${escapedCode}</code></pre>
+
+                </div>
+            </div>
+        `;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const navigation = document.getElementById("navigation");
+        const mainContent = document.getElementById("main-content");
+        const contentSections =
+          mainContent.querySelectorAll(".content-section");
+
+        Object.keys(contentData).forEach((key) => {
+          const section = document.getElementById(key);
+          if (section) {
+            section.innerHTML = createContentBlock(key);
+          }
+        });
+
+        // Initialize highlight.js
+        hljs.highlightAll();
+
+        function updateContent(hash) {
+          hash = hash.substring(1);
+          if (!hash) hash = "introduction";
+
+          contentSections.forEach((section) => {
+            if (section.id === hash) {
+              section.classList.add("active");
+            } else {
+              section.classList.remove("active");
+            }
+          });
+
+          document.querySelectorAll(".nav-link").forEach((link) => {
+            if (link.getAttribute("href") === `#${hash}`) {
+              link.classList.add("active");
+            } else {
+              link.classList.remove("active");
+            }
+          });
+        }
+
+        navigation.addEventListener("click", (e) => {
+          if (e.target.tagName === "A") {
+            const hash = e.target.getAttribute("href");
+            history.pushState(null, null, hash);
+            updateContent(hash);
+          }
+        });
+
+        window.addEventListener("popstate", () => {
+          updateContent(window.location.hash || "#introduction");
+        });
+
+        updateContent(window.location.hash || "#introduction");
+
+        mainContent.addEventListener("click", (e) => {
+          if (e.target.classList.contains("copy-btn")) {
+            const btn = e.target;
+            const pre = btn.closest(".bg-slate-900").querySelector("pre");
+            const code = pre.innerText;
+
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = code;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+              document.execCommand("copy");
+              btn.textContent = "Copied!";
+              setTimeout(() => {
+                btn.textContent = "Copy";
+              }, 2000);
+            } catch (err) {
+              btn.textContent = "Error";
+              setTimeout(() => {
+                btn.textContent = "Copy";
+              }, 2000);
+            }
+            document.body.removeChild(tempTextArea);
+          }
+        });
+
+        const ctx = document.getElementById("iteratorChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: ["Forward", "Bidirectional", "Random Access"],
+            datasets: [
+              {
+                label: "Relative Capabilities",
+                data: [2, 4, 7],
+                backgroundColor: [
+                  "rgba(59, 130, 246, 0.6)",
+                  "rgba(16, 185, 129, 0.6)",
+                  "rgba(139, 92, 246, 0.6)",
+                ],
+                borderColor: [
+                  "rgba(59, 130, 246, 1)",
+                  "rgba(16, 185, 129, 1)",
+                  "rgba(139, 92, 246, 1)",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(203, 213, 225, 0.2)",
+                },
+                ticks: {
+                  color: "#475569",
+                },
+              },
+              y: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  color: "#475569",
+                  font: {
+                    weight: "bold",
+                  },
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    let label = context.dataset.label || "";
+                    if (label) {
+                      label += ": ";
+                    }
+                    if (context.label === "Forward") label += "++";
+                    if (context.label === "Bidirectional") label += "++, --";
+                    if (context.label === "Random Access")
+                      label += "++, --, +n, -n, []";
+                    return label;
+                  },
+                },
+              },
+            },
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
