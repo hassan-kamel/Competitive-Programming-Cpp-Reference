@@ -4,31 +4,31 @@
 
 ### 1. [Sequence Containers](#sequence-containers)
 
-- [vector<T>](#1-vectort) - Dynamic array with automatic resizing
-- [deque<T>](#2-dequet) - Double-ended queue
-- [list<T>](#3-listt) - Doubly linked list
-- [forward_list<T>](#4-forward_listt) - Singly linked list
-- [array<T, N>](#5-arrayt-n) - Fixed-size array
+- [vector<T>](#1-vector) - Dynamic array with automatic resizing
+- [deque<T>](#2-deque) - Double-ended queue
+- [list<T>](#3-list) - Doubly linked list
+- [forward_list<T>](#4-forward_list) - Singly linked list
+- [array<T, N>](#5-array) - Fixed-size array
 
 ### 2. [Associative Containers](#associative-containers)
 
-- [set<T>](#1-sett) - Ordered unique elements (Red-Black Tree)
-- [multiset<T>](#2-multisett) - Ordered elements with duplicates
-- [map<K, V>](#3-mapk-v) - Ordered key-value pairs
-- [multimap<K, V>](#4-multimapk-v) - Ordered key-value pairs with duplicate keys
+- [set<T>](#1-set) - Ordered unique elements (Red-Black Tree)
+- [multiset<T>](#2-multiset) - Ordered elements with duplicates
+- [map<K, V>](#3-map) - Ordered key-value pairs
+- [multimap<K, V>](#4-multimap) - Ordered key-value pairs with duplicate keys
 
 ### 3. [Unordered Containers](#unordered-containers)
 
-- [unordered_set<T>](#1-unordered_sett) - Hash table for unique elements
-- [unordered_multiset<T>](#2-unordered_multisett) - Hash table with duplicates
-- [unordered_map<K, V>](#3-unordered_mapk-v) - Hash table for key-value pairs
-- [unordered_multimap<K, V>](#4-unordered_multimapk-v) - Hash table with duplicate keys
+- [unordered_set<T>](#1-unordered_set) - Hash table for unique elements
+- [unordered_multiset<T>](#2-unordered_multiset) - Hash table with duplicates
+- [unordered_map<K, V>](#3-unordered_map) - Hash table for key-value pairs
+- [unordered_multimap<K, V>](#4-unordered_multimap) - Hash table with duplicate keys
 
 ### 4. [Container Adaptors](#container-adaptors)
 
-- [stack<T>](#1-stackt) - LIFO container adapter
-- [queue<T>](#2-queuet) - FIFO container adapter
-- [priority_queue<T>](#3-priority_queuet) - Max/Min heap implementation
+- [stack<T>](#1-stack) - LIFO container adapter
+- [queue<T>](#2-queue) - FIFO container adapter
+- [priority_queue<T>](#3-priority_queue) - Max/Min heap implementation
 
 ### 5. [Algorithms](#algorithms)
 
@@ -48,8 +48,8 @@
 
 ### 7. [Utility Classes](#utility-classes)
 
-- [pair<T1, T2>](#1-pairt1-t2) - Two-element tuple
-- [tuple<T1, T2, ...>](#2-tuplet1-t2-) - Multi-element tuple
+- [pair<T1, T2>](#1-pair) - Two-element tuple
+- [tuple<T1, T2, ...>](#2-tuple) - Multi-element tuple
 
 ### 8. [Advanced Data Structures](#advanced-data-structures)
 
@@ -864,7 +864,7 @@ public:
 - Insert: O(m) where m is word length
 - Search: O(m)
 - StartsWith: O(m)
-- Space: O(ALPHABET*SIZE * N \_ M) where N is number of words
+- Space: O(ALPHABET_SIZE _ N _ M) where N is number of words
 
 ---
 
