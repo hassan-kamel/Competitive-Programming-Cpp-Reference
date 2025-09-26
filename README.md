@@ -2,15 +2,107 @@
 
 ## Table of Contents
 
-1. [Sequence Containers](#sequence-containers)
-2. [Associative Containers](#associative-containers)
-3. [Unordered Containers](#unordered-containers)
-4. [Container Adaptors](#container-adaptors)
-5. [Algorithms](#algorithms)
-6. [Iterators](#iterators)
-7. [Utility Classes](#utility-classes)
-8. [Advanced Data Structures](#advanced-data-structures)
-9. [Common Patterns](#common-patterns)
+### 1. [Sequence Containers](#sequence-containers)
+
+- [vector<T>](#1-vectort) - Dynamic array with automatic resizing
+- [deque<T>](#2-dequet) - Double-ended queue
+- [list<T>](#3-listt) - Doubly linked list
+- [forward_list<T>](#4-forward_listt) - Singly linked list
+- [array<T, N>](#5-arrayt-n) - Fixed-size array
+
+### 2. [Associative Containers](#associative-containers)
+
+- [set<T>](#1-sett) - Ordered unique elements (Red-Black Tree)
+- [multiset<T>](#2-multisett) - Ordered elements with duplicates
+- [map<K, V>](#3-mapk-v) - Ordered key-value pairs
+- [multimap<K, V>](#4-multimapk-v) - Ordered key-value pairs with duplicate keys
+
+### 3. [Unordered Containers](#unordered-containers)
+
+- [unordered_set<T>](#1-unordered_sett) - Hash table for unique elements
+- [unordered_multiset<T>](#2-unordered_multisett) - Hash table with duplicates
+- [unordered_map<K, V>](#3-unordered_mapk-v) - Hash table for key-value pairs
+- [unordered_multimap<K, V>](#4-unordered_multimapk-v) - Hash table with duplicate keys
+
+### 4. [Container Adaptors](#container-adaptors)
+
+- [stack<T>](#1-stackt) - LIFO container adapter
+- [queue<T>](#2-queuet) - FIFO container adapter
+- [priority_queue<T>](#3-priority_queuet) - Max/Min heap implementation
+
+### 5. [Algorithms](#algorithms)
+
+- [Sorting Algorithms](#1-sorting-algorithms) - sort, stable_sort, partial_sort, nth_element
+- [Binary Search](#2-binary-search) - binary_search, lower_bound, upper_bound
+- [Heap Operations](#3-heap-operations) - make_heap, push_heap, pop_heap, sort_heap
+- [Permutations](#4-permutations) - next_permutation, prev_permutation
+- [Numeric Algorithms](#5-numeric-algorithms) - accumulate, partial_sum, gcd, lcm
+- [Modifying Algorithms](#6-modifying-algorithms) - fill, generate, transform, replace, remove
+- [Non-modifying Algorithms](#7-non-modifying-algorithms) - find, count, search, min_element
+- [Set Operations](#8-set-operations) - set_union, set_intersection, set_difference
+
+### 6. [Iterators](#iterators)
+
+- [Iterator Types](#iterator-types) - Forward, Bidirectional, Random Access
+- [Iterator Operations](#iterator-operations) - advance, distance, next, prev
+
+### 7. [Utility Classes](#utility-classes)
+
+- [pair<T1, T2>](#1-pairt1-t2) - Two-element tuple
+- [tuple<T1, T2, ...>](#2-tuplet1-t2-) - Multi-element tuple
+
+### 8. [Advanced Data Structures](#advanced-data-structures)
+
+- [Segment Tree](#1-segment-tree-manual-implementation) - Range query and update
+- [Fenwick Tree (BIT)](#2-fenwick-tree-binary-indexed-tree) - Efficient prefix sums
+- [Disjoint Set Union (DSU)](#3-disjoint-set-union-dsuunion-find) - Union-Find operations
+- [Trie (Prefix Tree)](#4-trie-prefix-tree) - String prefix operations
+
+### 9. [String Algorithms](#string-algorithms)
+
+- [String Class Methods](#1-string-class-methods) - Basic string operations
+- [String Stream](#2-string-stream) - String parsing and formatting
+- [KMP Algorithm](#3-kmp-algorithm-pattern-matching) - Pattern matching
+- [Rolling Hash](#4-rolling-hash) - String hashing for fast comparison
+
+### 10. [Bit Manipulation](#bit-manipulation)
+
+- [Basic Operations](#1-basic-operations) - Set, clear, toggle bits
+- [Subset Generation](#2-subset-generation) - Generate all subsets
+
+### 11. [Mathematical Functions](#mathematical-functions)
+
+- [Built-in Math Functions](#1-built-in-math-functions) - pow, sqrt, log, trigonometric
+- [Combinatorics](#2-combinatorics) - Factorial, combinations, Pascal's triangle
+
+### 12. [Advanced STL Features](#advanced-stl-features)
+
+- [Custom Comparators](#1-custom-comparators) - Custom sorting and ordering
+- [Lambda Functions](#2-lambda-functions) - Anonymous functions and closures
+- [Function Objects](#3-function-objects-and-functors) - Standard functors and binding
+
+### 13. [Memory Management & Performance](#memory-management--performance-tips)
+
+- [Memory Optimization](#1-memory-optimization) - Reserve, emplace, shrink_to_fit
+- [Fast I/O](#2-fast-io) - Optimized input/output
+- [Compiler Optimizations](#3-compiler-optimizations) - Pragma directives and inlining
+
+### 14. [Common Patterns](#common-patterns)
+
+- [Two Pointers](#1-two-pointers) - Two pointers technique
+- [Sliding Window](#2-sliding-window) - Fixed and variable size windows
+- [Prefix Sums](#3-prefix-sums) - 1D and 2D prefix sum arrays
+- [Binary Search Patterns](#4-binary-search-patterns) - Different binary search variations
+- [Graph Algorithms](#5-graph-algorithms) - DFS, BFS, Dijkstra
+- [Dynamic Programming](#6-dynamic-programming-patterns) - 1D, 2D, and space-optimized DP
+- [Utility Functions](#7-common-utility-functions) - Fast I/O, modular arithmetic, prime checking
+
+### 15. [Contest-Specific Tips](#contest-specific-tips)
+
+- [Template Structure](#1-template-structure) - Competitive programming template
+- [Debugging Macros](#2-debugging-macros) - Debug output macros
+- [Common Edge Cases](#3-common-edge-cases) - Things to watch out for
+- [Time Complexity Guidelines](#4-time-complexity-guidelines) - Constraint-based complexity selection
 
 ---
 
