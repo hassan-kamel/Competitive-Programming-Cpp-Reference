@@ -1178,43 +1178,377 @@ vector<pair<int, int>> prime_factors(int n) {
 
 ```cpp
 #include <string>
+#include <algorithm>
+#include <cctype>
 string s = "hello";
+```
 
-// Basic operations - O(1)
-s.length(), s.size()
-s.empty()
-s.clear()
+**Basic Operations - O(1)**
 
-// Access - O(1)
-s[i], s.at(i)
-s.front(), s.back()
+```cpp
+// Length and size
+s.length(), s.size()                    // Returns string length
+s.empty()                              // Check if string is empty
+s.clear()                              // Remove all characters
 
-// Modification - O(n) for insertion/deletion
-s.push_back(c)
-s.pop_back()
-s.insert(pos, str)
-s.erase(pos, len)
-s.replace(pos, len, str)
+// Examples
+string str = "hello world";
+cout << str.length() << endl;          // Output: 11
+cout << str.size() << endl;            // Output: 11
+cout << str.empty() << endl;           // Output: 0 (false)
 
-// Substring - O(n)
-s.substr(pos, len)
+str.clear();
+cout << str.empty() << endl;           // Output: 1 (true)
+```
 
-// Search - O(nm) where n is string length, m is pattern length
-s.find(str, pos)
-s.rfind(str, pos)
-s.find_first_of(chars, pos)
-s.find_last_of(chars, pos)
-s.find_first_not_of(chars, pos)
-s.find_last_not_of(chars, pos)
+**Access Operations - O(1)**
 
-// Compare - O(n)
-s.compare(str)
-s == str, s != str, s < str
+```cpp
+// Element access
+s[i], s.at(i)                          // Access character at index (at() throws exception if out of range)
+s.front(), s.back()                    // Access first/last character
 
-// Conversion
-stoi(s), stol(s), stoll(s)      // string to int/long/long long
-stof(s), stod(s)                // string to float/double
-to_string(num)                  // number to string
+// Examples
+string str = "hello";
+cout << str[0] << endl;                // Output: h
+cout << str.at(1) << endl;             // Output: e
+cout << str.front() << endl;           // Output: h
+cout << str.back() << endl;            // Output: o
+
+// str.at(10) would throw std::out_of_range exception
+```
+
+**Capacity Operations - O(1)**
+
+```cpp
+// Capacity information
+s.capacity()                           // Current allocated capacity
+s.reserve(n)                           // Reserve space for at least n characters
+s.resize(n)                            // Resize string to n characters
+s.resize(n, c)                         // Resize string to n characters, fill with c
+s.shrink_to_fit()                      // Reduce capacity to match size
+
+// Examples
+string str = "hi";
+cout << str.capacity() << endl;        // May vary (implementation dependent)
+cout << str.size() << endl;            // Output: 2
+
+str.reserve(100);
+cout << str.capacity() << endl;        // Output: 100 or more
+
+str.resize(5, '!');
+cout << str << endl;                   // Output: hi!!!
+
+str.shrink_to_fit();
+cout << str.capacity() << endl;        // Reduced to match size
+```
+
+**Modification Operations - O(n) for insertion/deletion**
+
+```cpp
+// Append operations
+s.push_back(c)                         // Add character to end
+s.append(str)                          // Append string
+s.append(str, pos, len)                // Append substring
+s += str                               // Concatenate strings
+s += c                                 // Append character
+
+// Insert operations
+s.insert(pos, str)                     // Insert string at position
+s.insert(pos, str, len)                // Insert substring
+s.insert(pos, n, c)                    // Insert n copies of character
+
+// Erase operations
+s.erase(pos, len)                      // Erase substring
+s.erase(it)                           // Erase character at iterator
+s.erase(first, last)                   // Erase range
+s.pop_back()                          // Remove last character
+
+// Replace operations
+s.replace(pos, len, str)              // Replace substring with string
+s.replace(first, last, str)           // Replace range with string
+
+// Examples
+string str = "hello";
+
+// Append operations
+str.push_back('!');
+cout << str << endl;                   // Output: hello!
+
+str.append(" world");
+cout << str << endl;                   // Output: hello! world
+
+str += "!";
+cout << str << endl;                   // Output: hello! world!!
+
+// Insert operations
+str.insert(5, " beautiful");
+cout << str << endl;                   // Output: hello beautiful! world!!
+
+// Erase operations
+str.erase(5, 11);                      // Remove " beautiful"
+cout << str << endl;                   // Output: hello! world!!
+
+str.pop_back();
+cout << str << endl;                   // Output: hello! world!
+
+// Replace operations
+str.replace(0, 5, "Hi");
+cout << str << endl;                   // Output: Hi! world!
+```
+
+**Substring Operations - O(n)**
+
+```cpp
+// Substring extraction
+s.substr(pos, len)                     // Get substring starting at pos with length len
+s.substr(pos)                         // Get substring from pos to end
+
+// Examples
+string str = "hello world";
+string sub1 = str.substr(0, 5);        // "hello"
+string sub2 = str.substr(6);           // "world"
+string sub3 = str.substr(6, 3);        // "wor"
+```
+
+**Search Operations - O(n*m) where n is string length, m is pattern length**
+
+```cpp
+// Find operations
+s.find(str, pos)                      // Find first occurrence of str starting from pos
+s.rfind(str, pos)                     // Find last occurrence of str starting from pos
+s.find_first_of(chars, pos)           // Find first character from chars starting from pos
+s.find_last_of(chars, pos)            // Find last character from chars starting from pos
+s.find_first_not_of(chars, pos)       // Find first character not in chars starting from pos
+s.find_last_not_of(chars, pos)        // Find last character not in chars starting from pos
+
+// Return value: string::npos if not found, otherwise the position
+
+// Examples
+string str = "hello world, hello universe";
+string pattern = "hello";
+
+// Find operations
+size_t pos1 = str.find(pattern);       // Position of first "hello" (0)
+size_t pos2 = str.find(pattern, 5);    // Position of second "hello" (13)
+size_t pos3 = str.rfind(pattern);      // Position of last "hello" (13)
+size_t pos4 = str.find("xyz");          // string::npos (not found)
+
+cout << pos1 << " " << pos2 << " " << pos3 << " " << pos4 << endl;
+
+// Character set operations
+string vowels = "aeiou";
+size_t pos5 = str.find_first_of(vowels);      // Position of first vowel (1 - 'e')
+size_t pos6 = str.find_first_not_of("helo wrd,"); // Position of first non-matching char (11 - 'u')
+
+cout << pos5 << " " << pos6 << endl;
+```
+
+**Comparison Operations - O(n)**
+
+```cpp
+// Comparison
+s.compare(str)                        // Compare strings lexicographically
+s.compare(pos, len, str)              // Compare substring with string
+s.compare(pos, len, str, pos2, len2)  // Compare substrings
+
+// Operators
+s == str, s != str, s < str, s <= str, s > str, s >= str
+
+// Examples
+string str1 = "apple";
+string str2 = "banana";
+string str3 = "Apple";
+
+cout << (str1 < str2) << endl;         // Output: 1 (true) - 'a' < 'b'
+cout << (str1 == str3) << endl;        // Output: 0 (false) - case sensitive
+cout << str1.compare(str2) << endl;    // Negative value - str1 < str2
+
+int result = str1.compare(0, 3, str3, 0, 3);  // Compare "app" vs "App"
+cout << result << endl;                // Positive value - 'a' > 'A' in ASCII
+```
+
+**Case Conversion Operations**
+
+```cpp
+// Case conversion (C++11, requires <algorithm> and <cctype>)
+transform(s.begin(), s.end(), s.begin(), ::toupper);  // Convert to uppercase
+transform(s.begin(), s.end(), s.begin(), ::tolower);  // Convert to lowercase
+
+// Check character cases
+isupper(c), islower(c), isalpha(c), isdigit(c), isalnum(c), isspace(c)
+
+// Examples
+string str = "Hello World!";
+cout << str << endl;                   // Output: Hello World!
+
+// Convert to uppercase
+string upper = str;
+transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+cout << upper << endl;                 // Output: HELLO WORLD!
+
+// Convert to lowercase
+string lower = str;
+transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+cout << lower << endl;                 // Output: hello world!
+
+// Check characters
+cout << isupper('A') << endl;          // Output: 1 (true)
+cout << islower('a') << endl;          // Output: 1 (true)
+cout << isdigit('5') << endl;          // Output: 1 (true)
+cout << isspace(' ') << endl;          // Output: 1 (true)
+```
+
+**Iterator Operations - O(1)**
+
+```cpp
+// Iterator access
+s.begin(), s.end()                    // Iterator to beginning/end
+s.rbegin(), s.rend()                  // Reverse iterator to beginning/end
+s.cbegin(), s.cend()                  // Const iterator to beginning/end
+s.crbegin(), s.crend()                // Const reverse iterator to beginning/end
+
+// Examples
+string str = "hello";
+
+// Forward iteration
+for (auto it = str.begin(); it != str.end(); ++it) {
+    cout << *it << " ";
+}
+cout << endl;                          // Output: h e l l o
+
+// Reverse iteration
+for (auto it = str.rbegin(); it != str.rend(); ++it) {
+    cout << *it << " ";
+}
+cout << endl;                          // Output: o l l e h
+
+// Range-based for loop
+for (char c : str) {
+    cout << c << " ";
+}
+cout << endl;                          // Output: h e l l o
+```
+
+**Numeric Conversions**
+
+```cpp
+// String to number
+stoi(s), stol(s), stoll(s)             // String to int/long/long long
+stoul(s), stoull(s)                   // String to unsigned long/unsigned long long
+stof(s), stod(s), stold(s)            // String to float/double/long double
+
+// Number to string
+to_string(num)                        // Convert any numeric type to string
+
+// Examples
+string num_str = "12345";
+int num = stoi(num_str);
+cout << num << endl;                   // Output: 12345
+
+string float_str = "3.14159";
+double pi = stod(float_str);
+cout << pi << endl;                    // Output: 3.14159
+
+int number = 42;
+string str_num = to_string(number);
+cout << str_num << endl;               // Output: "42"
+
+double decimal = 3.14159;
+string str_decimal = to_string(decimal);
+cout << str_decimal << endl;           // Output: "3.141590"
+```
+
+**Common String Manipulation Patterns**
+
+```cpp
+// Remove all occurrences of a character
+string remove_char(string s, char c) {
+    s.erase(remove(s.begin(), s.end(), c), s.end());
+    return s;
+}
+
+// Check if string is palindrome
+bool is_palindrome(string s) {
+    string rev = s;
+    reverse(rev.begin(), rev.end());
+    return s == rev;
+}
+
+// Count words in a string
+int count_words(string s) {
+    stringstream ss(s);
+    string word;
+    int count = 0;
+    while (ss >> word) count++;
+    return count;
+}
+
+// Examples
+string str = "hello world!!";
+cout << remove_char(str, '!') << endl; // Output: "hello world"
+
+string pal = "radar";
+cout << is_palindrome(pal) << endl;    // Output: 1 (true)
+
+**String Concatenation and Merging**
+
+```cpp
+// Multiple ways to merge/combine strings
+
+// Method 1: Using += operator
+string str1 = "Hello";
+string str2 = " World";
+str1 += str2;                          // str1 becomes "Hello World"
+str1 += "!";                           // str1 becomes "Hello World!"
+
+// Method 2: Using append()
+string str3 = "Hello";
+str3.append(" World");                 // str3 becomes "Hello World"
+str3.append("!");                      // str3 becomes "Hello World!"
+
+// Method 3: Using + operator (creates new string)
+string str4 = "Hello";
+string str5 = " World";
+string result = str4 + str5;           // result = "Hello World"
+result = result + "!";                 // result = "Hello World!"
+
+// Method 4: Using stringstream for complex merging
+stringstream ss;
+ss << "Hello" << " " << "World" << "!";
+string merged = ss.str();              // merged = "Hello World!"
+
+// Method 5: Using insert() to merge at specific position
+string base = "Hello!";
+base.insert(5, " Beautiful");          // base = "Hello Beautiful!"
+
+// Method 6: Using replace() to merge by replacing
+string target = "Hello";
+target.replace(0, 0, "Hi ");          // target = "Hi Hello"
+
+// Examples
+string first = "Hello";
+string second = "World";
+
+// Multiple concatenation methods
+cout << first + " " + second << endl;  // Output: Hello World
+cout << (first += second) << endl;     // Output: HelloWorld
+
+// Merging with separators
+vector<string> words = {"Hello", "World", "C++"};
+string sentence;
+for (size_t i = 0; i < words.size(); i++) {
+    sentence += words[i];
+    if (i < words.size() - 1) {
+        sentence += " ";
+    }
+}
+cout << sentence << endl;              // Output: Hello World C++
+
+// Complex merging with stringstream
+stringstream complex_ss;
+complex_ss << "Number: " << 42 << ", String: " << "Hello" << ", Float: " << 3.14;
+cout << complex_ss.str() << endl;      // Output: Number: 42, String: Hello, Float: 3.14
 ```
 
 ### 2. String Stream
