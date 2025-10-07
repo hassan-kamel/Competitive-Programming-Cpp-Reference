@@ -864,7 +864,7 @@ public:
 - Insert: O(m) where m is word length
 - Search: O(m)
 - StartsWith: O(m)
-- Space: O(ALPHABET_SIZE _ N _ M) where N is number of words
+- Space: O(ALPHABET*SIZE * N \_ M) where N is number of words
 
 ---
 
@@ -1311,7 +1311,7 @@ string sub2 = str.substr(6);           // "world"
 string sub3 = str.substr(6, 3);        // "wor"
 ```
 
-**Search Operations - O(n*m) where n is string length, m is pattern length**
+**Search Operations - O(n\*m) where n is string length, m is pattern length**
 
 ```cpp
 // Find operations
@@ -1461,7 +1461,7 @@ cout << str_decimal << endl;           // Output: "3.141590"
 
 **Common String Manipulation Patterns**
 
-```cpp
+````cpp
 // Remove all occurrences of a character
 string remove_char(string s, char c) {
     s.erase(remove(s.begin(), s.end(), c), s.end());
@@ -1549,7 +1549,7 @@ cout << sentence << endl;              // Output: Hello World C++
 stringstream complex_ss;
 complex_ss << "Number: " << 42 << ", String: " << "Hello" << ", Float: " << 3.14;
 cout << complex_ss.str() << endl;      // Output: Number: 42, String: Hello, Float: 3.14
-```
+````
 
 ### 2. String Stream
 
@@ -1959,15 +1959,22 @@ register int i;
 
 ### 1. Template Structure
 
+**Complete Competitive Programming Template with Optimizations**
+
 ```cpp
+#pragma GCC optimize("Ofast")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
+#pragma GCC optimize("unroll-loops")
 #include <bits/stdc++.h>
 using namespace std;
 
+// Type definitions
 typedef long long ll;
 typedef pair<int, int> pii;
 typedef vector<int> vi;
 typedef vector<ll> vll;
 
+// Macros
 #define pb push_back
 #define mp make_pair
 #define fi first
@@ -1977,19 +1984,51 @@ typedef vector<ll> vll;
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
 #define per(i, a, b) for (int i = (b) - 1; i >= (a); i--)
 
-const int MOD = 1e9 + 7;
+// Constants
+const int MOD = 1000000007;
 const int INF = 1e9;
 const ll LINF = 1e18;
+
+// Utility macros for competitive programming
+#define yes cout << "YES\n"
+#define no cout << "NO\n"
+#define nl '\n'
+
+// Example solve function structure
+void solve() {
+
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    cout.tie(NULL);  // Enhanced I/O setup for better performance
 
-    // Your code here
-
+    int t;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
     return 0;
 }
 ```
+
+**Template Features:**
+
+- **Performance Optimizations**: GCC pragmas for maximum speed
+- **Type Definitions**: Common type aliases for cleaner code
+- **Utility Macros**: Shortcuts for frequently used operations
+- **Constants**: Standard values for competitive programming
+- **Fast I/O**: Optimized input/output with all ties disabled
+- **Structured Layout**: Ready for multiple test cases with `solve()` function pattern
+- **Error Prevention**: Uses `'\n'` instead of `endl` for better performance
+
+**Usage Tips:**
+
+- Add your problem-specific code inside the `solve()` function
+- Use the provided macros and type definitions for cleaner code
+- The template handles multiple test cases automatically
+- For single test case problems, modify the main function accordingly
 
 ### 2. Debugging Macros
 
